@@ -1,0 +1,41 @@
+{
+  "name": "libmicroservice",
+  "version": "0.0.2",
+  "description": "",
+  "main": "src/server/index.js",
+  "scripts": {
+    "start": "NODE_ENV=local npm run start:production",
+    "start:production": "node -r @std/esm src/server/index.js",
+    "lint": "eslint *.js src/**/*.js --fix",
+    "docs": "node -r @std/esm tooling/docs.js",
+    "test": "NODE_ENV=unit mocha -r @std/esm src/**/*.test.js -R list --exit"
+  },
+  "author": "Ryan Copley <rcopley@gannett.com>",
+  "license": "MIT",
+  "@std/esm": {
+    "mode": "js"
+  },
+  "devDependencies": {
+    "bluebird": "^3.5.1",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "glob": "^7.1.2",
+    "chai-json-schema-ajv": "^3.0.0",
+    "eslint": "^4.18.1",
+    "eslint-plugin-mocha": "^4.12.1",
+    "eslint-plugin-react": "^7.7.0",
+    "jsdoc": "^3.5.5",
+    "jsdoc-to-markdown": "^4.0.1",
+    "mocha": "^5.0.1"
+  },
+  "dependencies": {
+    "@std/esm": "^0.25.2",
+    "ajv": "^6.2.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "lodash": "^4.17.5",
+    "morgan": "^1.9.0",
+    "path-to-regexp": "^2.2.0",
+    "superagent": "^3.8.2"
+  }
+}
