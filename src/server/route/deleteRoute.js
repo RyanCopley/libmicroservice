@@ -1,13 +1,13 @@
 'use strict';
-import RouteABC from '../route';
+import Route from './route';
 
 /**
  * DeleteRoute is an Abstract Base Class for a HTTP DELETE endpoint.
  */
 
-export class DeleteRoute extends RouteABC {
+export class DeleteRoute extends Route {
 
-    static verb() {
+    static get verb() {
         return 'DELETE';
     }
 
@@ -16,12 +16,12 @@ export class DeleteRoute extends RouteABC {
     }
 
     static _request(r) {
-        return r.delete(this.path());
+        return r.delete(this.path);
     }
 
     static _attach(router) {
         super._attach(router);
-        router.delete(this.path(), (...i) => super._createRemoteRequest(...i));
+        router.delete(this.path, (...i) => super._createRemoteRequest(...i));
     }
 
 }

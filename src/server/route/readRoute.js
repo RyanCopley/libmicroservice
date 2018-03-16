@@ -1,13 +1,13 @@
 'use strict';
-import RouteABC from '../route';
+import Route from './route';
 
 /**
  * ReadRoute is an Abstract Base Class for a HTTP GET endpoint.
  */
 
-export class ReadRoute extends RouteABC {
+export class ReadRoute extends Route {
 
-    static verb() {
+    static get verb() {
         return 'GET';
     }
 
@@ -16,12 +16,12 @@ export class ReadRoute extends RouteABC {
     }
 
     static _request(r) {
-        return r.get(this.path());
+        return r.get(this.path);
     }
 
     static _attach(router) {
         super._attach(router);
-        router.get(this.path(), (...i) => this._createRemoteRequest(...i));
+        router.get(this.path, (...i) => this._createRemoteRequest(...i));
     }
 
 }

@@ -17,7 +17,7 @@ class Server {
      *
      * @returns {*|express}
      */
-    express() {
+    get express() {
         return this.app;
     }
 

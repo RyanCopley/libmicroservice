@@ -5,10 +5,10 @@ import Server from './server';
 const HTTP_PORT_DEFAULT = 3000;
 const HTTP_ADDR_DEFAULT = '0.0.0.0';
 
-export { CreateRoute } from './abc/route/create';
-export { DeleteRoute } from './abc/route/delete';
-export { ReadRoute } from './abc/route/read';
-export { UpdateRoute } from './abc/route/update';
+export { CreateRoute } from './route/createRoute';
+export { DeleteRoute } from './route/deleteRoute';
+export { ReadRoute } from './route/readRoute';
+export { UpdateRoute } from './route/updateRoute';
 export { Environment } from './environment';
 export { Schema } from './schema';
 

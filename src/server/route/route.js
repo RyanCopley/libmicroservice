@@ -10,10 +10,10 @@ import QueryString from 'querystring';
 // import RPCError from '../error/req/rpc';
 
 /**
- * RouteABC is an Abstract Base Class for any Express route setup.
+ * Route is an Abstract Base Class for any Express route setup.
  */
 
-class RouteABC {
+class Route {
 
     // GET
     read() {
@@ -36,29 +36,29 @@ class RouteABC {
     }
 
     // Express request (req)
-    request(){
+    get request(){
         return this.express.req;
     }
 
     // Express response (res)
-    response() {
+    get response() {
         return this.express.res;
     }
 
 
-    static path() {
+    static get path() {
         throw new Error('Route Path not set.');
     }
 
-    static verb () {
+    static get verb() {
         throw new Error('Route Verb not set.');
     }
 
-    static requestSchema() {
+    static get requestSchema() {
         throw new Error('Route request schema not set.');
     }
 
-    responseSchema() {
+    get responseSchema() {
         throw new Error('Route response schema not set.');
     }
 
@@ -67,12 +67,10 @@ class RouteABC {
     }
 
     static _validateRequest(req) {
-        const RequestSchema = this.requestSchema();
-        const validator = RequestSchema.Validator();
-        if (validator(req)) {
+        if (this.requestSchema.Validator(req)) {
             return true;
         }
-        throw new RequestSchemaError(validator.errors);
+        throw new RequestSchemaError(this.requestSchema.Validator.errors);
     }
 
     static _createRemoteRequest(...i) {
@@ -86,7 +84,8 @@ class RouteABC {
         // Perform schema validation client side first, since we have their request models available.
         this._validateRequest(req);
         // Begin forming URL
-        const requestUrl = new url.URL(`${this.compilePath(req.param)}?${QueryString.stringify(req.query)}`, this.dns().baseUrl()); // req.query = QSPs
+        const urlPath = `${this.compilePath(req.param)}?${QueryString.stringify(req.query)}`;
+        const requestUrl = new url.URL(urlPath, this.dns.baseUrl); // req.query = QSPs
         // Begin constructing RPC request
         const request = superagent.get(requestUrl.href);
         for (let key in req.headers) { request.set(key, req.headers[key]); } // req.headers = headers
@@ -96,22 +95,20 @@ class RouteABC {
 
     static compilePath(params) {
         if (!this.compiledPath){
-            this.compiledPath = PathToRegExp.compile(this.path());
+            this.compiledPath = PathToRegExp.compile(this.path);
         }
         return this.compiledPath(params);
     }
 
-    validatedJson(data, res) {
-        const ResponseSchema = this.responseSchema();
-        const validator = ResponseSchema.Validator();
-        if (validator(data)) {
-            return res.json(data);
+    sendValidatedJson(data) {
+        const ResponseSchema = this.responseSchema;
+        if (ResponseSchema.Validator(data)) {
+            return this.response.json(data);
         }
-        throw new ResponseSchemaError(validator.errors);
+        throw new ResponseSchemaError(ResponseSchema.Validato.errors);
     }
 
     _transferExpress(req, res, next) {
-        res.validatedJson = d => this.validatedJson(d, res);
         this.express = { req, res, next };
     }
 
@@ -125,7 +122,7 @@ class RouteABC {
         }
     }
 
-    static dns() {
+    static get dns() {
         throw new Error('DNS entry for route was not set. Required for RPC.');
     }
 
@@ -136,8 +133,8 @@ class RouteABC {
     }
 
     static toString() {
-        return `${this.verb()} ${this.path()}`;
+        return `${this.verb} ${this.path}`;
     }
 
 }
-export default RouteABC;
+export default Route;

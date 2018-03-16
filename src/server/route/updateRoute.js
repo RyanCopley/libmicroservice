@@ -1,13 +1,13 @@
 'use strict';
-import RouteABC from '../route';
+import Route from './route';
 
 /**
  * UpdateRoute is an Abstract Base Class for a HTTP PUT endpoint.
  */
 
-export class UpdateRoute extends RouteABC {
+export class UpdateRoute extends Route {
 
-    static verb() {
+    static get verb() {
         return 'PUT';
     }
 
@@ -16,11 +16,11 @@ export class UpdateRoute extends RouteABC {
     }
 
     static _request(r) {
-        return r.put(this.path());
+        return r.put(this.path);
     }
 
     static _attach(router) {
         super._attach(router);
-        router.put(this.path(), super._createRemoteRequest);
+        router.put(this.path, super._createRemoteRequest);
     }
 }
